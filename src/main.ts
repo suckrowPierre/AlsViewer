@@ -4,9 +4,8 @@ import {
   setXmlViewerContent,
   openXmlViewerSearch,
 } from "./xmlViewer";
+import { createXmlTreeViewer, renderXmlTree } from "./xmlTreeViewer";
 import { setupSplitDivider } from "./split";
-
-// setup
 
 setupSplitDivider();
 
@@ -20,29 +19,46 @@ const input = requireElement<HTMLInputElement>("fileInput");
 const uploadView = requireElement<HTMLDivElement>("upload-view");
 const dropZone = requireElement<HTMLLabelElement>("drop-zone");
 const xmlViewerEl = requireElement<HTMLDivElement>("xml-viewer");
+const codeViewEl = requireElement<HTMLDivElement>("codeView");
+const treeViewEl = requireElement<HTMLDivElement>("treeView");
+
 const searchButton = requireElement<HTMLButtonElement>("searchButton");
+const codeViewButton = requireElement<HTMLButtonElement>("codeViewButton");
+const treeViewButton = requireElement<HTMLButtonElement>("treeViewButton");
 
 const sessionNameEl = requireElement<HTMLElement>("sessionName");
 const bpmDisplayEl = requireElement<HTMLElement>("bpmDisplay");
 const lastModifiedEl = requireElement<HTMLElement>("lastModified");
 
-const viewer = createXmlViewer(xmlViewerEl, "");
-const parser = new DOMParser();
-
-// viewer
+const codeViewer = createXmlViewer(codeViewEl, "");
+const treeViewer = createXmlTreeViewer(treeViewEl, 2);
 
 function showViewer() {
   uploadView.classList.add("hidden");
   xmlViewerEl.classList.remove("hidden");
 }
 
-function renderXml(xmlText: string) {
-  setXmlViewerContent(viewer, xmlText);
-  showViewer();
-  searchButton.onclick = () => openXmlViewerSearch(viewer);
+function showCodeView() {
+  codeViewEl.classList.remove("hidden");
+  treeViewEl.classList.add("hidden");
 }
 
-// info pane
+function showTreeView() {
+  treeViewEl.classList.remove("hidden");
+  codeViewEl.classList.add("hidden");
+  treeViewer.cy.resize();
+  treeViewer.cy.fit(undefined, 24);
+}
+
+function renderXml(xmlText: string) {
+  setXmlViewerContent(codeViewer, xmlText);
+  showViewer();
+  showCodeView();
+
+  searchButton.onclick = () => openXmlViewerSearch(codeViewer);
+  codeViewButton.onclick = () => showCodeView();
+  treeViewButton.onclick = () => showTreeView();
+}
 
 function formatLastModified(date: Date): string {
   return new Intl.DateTimeFormat(undefined, {
@@ -66,9 +82,9 @@ function renderSessionData(file: File, xmlText: string) {
     ? String(sessionData.bpm.value)
     : "_";
   lastModifiedEl.textContent = formatLastModified(sessionData.lastModified);
-}
 
-// file handling
+  renderXmlTree(treeViewer, xml);
+}
 
 function showError(error: string) {
   clearSessionInfo();
@@ -87,8 +103,6 @@ async function processFile(file: File) {
   }
 }
 
-// drag and drop
-
 function preventDefaults(event: Event) {
   event.preventDefault();
   event.stopPropagation();
@@ -97,8 +111,6 @@ function preventDefaults(event: Event) {
 function setDropZoneActive(isActive: boolean) {
   dropZone.classList.toggle("drag-active", isActive);
 }
-
-// events
 
 input.addEventListener("change", async (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0];

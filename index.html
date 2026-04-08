@@ -5,11 +5,17 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script type="module" src="src/main.ts"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="src/main.css" />
         <title>.AlsViewer</title>
     </head>
     <body
-        class="font-mono w-full h-[100dvh] grid grid-cols-1 grid-rows-[auto_1fr_auto] divide-y divide-black bg-[#fffff2]"
+        class="font-code text-sm w-full h-[100dvh] grid grid-cols-1 grid-rows-[auto_1fr_auto] divide-y divide-black bg-[#fffff2]"
     >
         <header class="flex flex-row px-4 py-2 col-span-full">
             .AlsViewer
@@ -24,15 +30,14 @@
                         <label
                             id="drop-zone"
                             for="fileInput"
-                            class="h-full w-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-black px-6 text-center cursor-pointer transition"
+                            class="h-full w-full flex flex-col items-center justify-center border-2 border-dashed border-black px-6 text-center cursor-pointer transition"
                         >
-                            <div class="text-2xl">Drop your .als file here</div>
-                            <div class="mt-2 text-sm opacity-80">
-                                or click to choose a file
+                            <div class="pb-4">
+                                Inspect your Ableton session files.
                             </div>
-                            <div
-                                class="mt-6 rounded-md border border-black px-4 py-2 text-sm"
-                            >
+                            <div class="">Drop your .als file here</div>
+                            <div class="">or click to choose a file</div>
+                            <div class="pt-4 text-sm underline">
                                 Select file
                             </div>
                         </label>
@@ -47,11 +52,35 @@
 
                     <div
                         id="xml-viewer"
-                        class="hidden flex-1 min-h-0 pl-4 overflow-hidden"
+                        class="hidden flex-1 min-h-0 pl-4 overflow-hidden flex flex-col"
                     >
-                        <div class="flex flex-row items-center justify-between">
+                        <div
+                            class="flex flex-row items-center justify-between shrink-0"
+                        >
                             <p id="sessionName">_</p>
                             <div class="h-4 flex gap-2">
+                                <button
+                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    id="codeViewButton"
+                                    title="Show Code View"
+                                >
+                                    <img
+                                        src="/code.svg"
+                                        alt="Code View"
+                                        class="h-full w-full object-contain"
+                                    />
+                                </button>
+                                <button
+                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    id="treeViewButton"
+                                    title="Show Tree View"
+                                >
+                                    <img
+                                        src="/tree.svg"
+                                        alt="Tree View"
+                                        class="h-full w-full object-contain"
+                                    />
+                                </button>
                                 <button
                                     class="ml-auto h-4 w-4 cursor-pointer"
                                     id="downloadButton"
@@ -86,6 +115,14 @@
                                     />
                                 </button>
                             </div>
+                        </div>
+
+                        <div class="flex-1 min-h-0 relative">
+                            <div id="codeView" class="h-full min-h-0"></div>
+                            <div
+                                id="treeView"
+                                class="hidden h-full min-h-0 w-full"
+                            ></div>
                         </div>
                     </div>
                 </section>

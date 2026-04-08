@@ -17,12 +17,15 @@
     "@lezer/highlight": "^1.2.3",
     "@tailwindcss/vite": "^4.2.2",
     "@xmldom/xmldom": "^0.9.9",
+    "cytoscape": "^3.33.2",
+    "cytoscape-dagre": "^2.5.0",
     "fflate": "^0.8.2",
     "split.js": "^1.6.5",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.7"
   },
   "devDependencies": {
+    "@types/cytoscape-dagre": "^2.3.4",
     "@types/node": "^25.5.2",
     "typescript": "^6.0.2"
   }
