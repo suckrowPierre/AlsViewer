@@ -14,7 +14,14 @@ import {
 } from "@codemirror/view";
 import { xml } from "@codemirror/lang-xml";
 import { search, searchKeymap, openSearchPanel } from "@codemirror/search";
-import { foldGutter, codeFolding, foldKeymap } from "@codemirror/language";
+import {
+  defaultHighlightStyle,
+  foldGutter,
+  codeFolding,
+  foldKeymap,
+  forceParsing,
+  syntaxHighlighting,
+} from "@codemirror/language";
 
 type XmlNodeWithPosition = {
   lineNumber?: number;
@@ -68,12 +75,35 @@ const clearActiveNodeOnClick = EditorView.domEventHandlers({
   },
 });
 
+function finishInitialXmlLayout(view: EditorView) {
+  view.requestMeasure({
+    read() {
+      return view.state.doc.length;
+    },
+    write(docLength) {
+      forceParsing(view, docLength, 1000);
+
+      requestAnimationFrame(() => {
+        view.requestMeasure({
+          read() {
+            return view.state.doc.length;
+          },
+          write(nextDocLength) {
+            forceParsing(view, nextDocLength, 1000);
+          },
+        });
+      });
+    },
+  });
+}
+
 export const createXmlViewer = (parent: HTMLElement, initialDoc = "") => {
   const view = new EditorView({
     state: EditorState.create({
       doc: initialDoc,
       extensions: [
         xml(),
+        syntaxHighlighting(defaultHighlightStyle),
         EditorView.lineWrapping,
         lineNumbers(),
         codeFolding(),
@@ -83,9 +113,28 @@ export const createXmlViewer = (parent: HTMLElement, initialDoc = "") => {
         activeNodeField,
         clearActiveNodeOnClick,
         EditorView.theme({
+          ".cm-content": {
+            caretColor: "#000000",
+          },
+          ".cm-scroller": {
+            fontFamily: '"Source Code Pro", monospace',
+          },
+          ".cm-gutters": {
+            backgroundColor: "#fffff2",
+            border: "none",
+          },
+          ".cm-lineNumbers .cm-gutterElement": {
+            color: "#a89984",
+          },
           ".cm-active-xml-node": {
             background: "rgba(201, 200, 189, 0.3)",
             borderRadius: "2px",
+          },
+          ".cm-selectionBackground": {
+            backgroundColor: "rgba(60, 66, 87, 0.18) !important",
+          },
+          "&.cm-focused .cm-selectionBackground": {
+            backgroundColor: "rgba(60, 66, 87, 0.22) !important",
           },
         }),
         EditorView.editable.of(false),
@@ -107,6 +156,12 @@ export const setXmlViewerContent = (view: EditorView, xmlText: string) => {
     },
     effects: setActiveNodeEffect.of(null),
   });
+
+  finishInitialXmlLayout(view);
+};
+
+export const refreshXmlViewerAfterBecomingVisible = (view: EditorView) => {
+  finishInitialXmlLayout(view);
 };
 
 export const openXmlViewerSearch = (view: EditorView) => {
