@@ -1,0 +1,25 @@
+{
+  "name": "AlsViewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/lang-xml": "^6.1.0",
+    "@codemirror/language": "^6.12.3",
+    "@codemirror/search": "^6.6.0",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.41.0",
+    "@lezer/highlight": "^1.2.3",
+    "@tailwindcss/vite": "^4.2.2",
+    "@xmldom/xmldom": "^0.9.9",
+    "fflate": "^0.8.2",
+    "split.js": "^1.6.5",
+    "tailwindcss": "^4.2.2",
+    "vite": "^8.0.7"
+  }
+}

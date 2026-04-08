@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type="module" src="src/main.js"></script>
+        <link rel="stylesheet" href="src/main.css" />
+        <title>.AlsViewer</title>
+    </head>
+    <body
+        class="font-mono w-full h-[100dvh] grid grid-cols-1 grid-rows-[auto_1fr_auto] divide-y divide-black bg-[#fffff2]"
+    >
+        <header class="flex flex-row px-4 py-2 col-span-full">
+            .AlsViewer
+        </header>
+        <main class="min-h-0">
+            <div id="split" class="flex h-full w-full min-h-0">
+                <section
+                    id="xml-pane"
+                    class="min-w-0 min-h-0 py-2 flex flex-col"
+                >
+                    <div id="upload-view" class="flex-1 min-h-0 p-8">
+                        <label
+                            id="drop-zone"
+                            for="fileInput"
+                            class="h-full w-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-black px-6 text-center cursor-pointer transition"
+                        >
+                            <div class="text-2xl">Drop your .als file here</div>
+                            <div class="mt-2 text-sm opacity-80">
+                                or click to choose a file
+                            </div>
+                            <div
+                                class="mt-6 rounded-md border border-black px-4 py-2 text-sm"
+                            >
+                                Select file
+                            </div>
+                        </label>
+
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept=".als"
+                            class="hidden"
+                        />
+                    </div>
+
+                    <div
+                        id="xml-viewer"
+                        class="hidden flex-1 min-h-0 pl-4 overflow-hidden"
+                    >
+                        <div class="flex flex-row items-center justify-between">
+                            <p>Filename.als</p>
+                            <div class="h-4 flex gap-2">
+                                <button
+                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    id="downloadButton"
+                                    title="Download XML"
+                                >
+                                    <img
+                                        src="/download.svg"
+                                        alt="Download"
+                                        class="h-full w-full object-contain"
+                                    />
+                                </button>
+                                <button
+                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    id="searchButton"
+                                    title="Search"
+                                >
+                                    <img
+                                        src="/search.svg"
+                                        alt="Search"
+                                        class="h-full w-full object-contain"
+                                    />
+                                </button>
+                                <button
+                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    id="cancelButton"
+                                    title="Cancel"
+                                >
+                                    <img
+                                        src="/x.svg"
+                                        alt="Cancel"
+                                        class="h-full w-full object-contain"
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="info-pane" class="min-w-0 overflow-auto">
+                    <div class="flex gap-4 border-b py-2">
+                        <div>BPM: <span id="bpmDisplay">_</span></div>
+                        <div>
+                            Last Modified: <span id="lastModified">_</span>
+                        </div>
+                    </div>
+
+                    <details class="border-b py-2">
+                        <summary>
+                            Tracks (<span id="trackCount">0</span>)
+                        </summary>
+                        <div class="content">Hidden content here</div>
+                    </details>
+                    <details class="border-b py-2">
+                        <summary>
+                            FileRefs (<span id="fileRefCount">0</span>)
+                        </summary>
+                        <div class="content">Hidden content here</div>
+                    </details>
+                </section>
+            </div>
+        </main>
+        <footer class="flex flex-row px-4 py-2 col-span-full text-xs">
+            Impressum
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+.gutter {
+    @apply bg-black;
+}
+
+.gutter.gutter-horizontal {
+    cursor: col-resize;
+    width: 12px;
+    background: transparent;
+    position: relative;
+}
+
+.gutter.gutter-horizontal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+    background: black;
+}
+
+.cm-editor {
+    height: 100%;
+}
+
+.cm-scroller {
+    overflow: auto;
+}
