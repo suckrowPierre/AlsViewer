@@ -53,3 +53,7 @@
     line-height: 1.35;
     box-shadow: 2px 2px 0 #000;
 }
+
+summary {
+    cursor: pointer;
+}

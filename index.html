@@ -35,7 +35,10 @@
                             <div class="pb-4">
                                 Inspect your Ableton session files.
                             </div>
-                            <div class="">Drop your .als file here</div>
+                            <div class="">
+                                Drop your
+                                <span class="font-bold">.als</span> file here
+                            </div>
                             <div class="">or click to choose a file</div>
                             <div class="pt-4 text-sm underline">
                                 Select file
@@ -129,23 +132,31 @@
 
                 <section id="info-pane" class="min-w-0 overflow-auto">
                     <div class="flex gap-4 border-b py-2">
-                        <div>BPM: <span id="bpmDisplay">_</span></div>
                         <div>
-                            Last Modified: <span id="lastModified">_</span>
+                            <span class="font-bold">BPM: </span>
+                            <span id="bpmDisplay">_</span>
+                        </div>
+                        <div>
+                            <span class="font-bold">Last Modified: </span>
+                            <span id="lastModified">_</span>
                         </div>
                     </div>
 
                     <details class="border-b py-2">
                         <summary>
-                            Tracks (<span id="trackCount">0</span>)
+                            <span class="font-bold">Tracks</span> (<span
+                                id="trackCount"
+                                >0</span
+                            >)
                         </summary>
-                        <div class="content">Hidden content here</div>
+                        <div class="content" id="trackInfo"></div>
                     </details>
                     <details class="border-b py-2">
                         <summary>
-                            FileRefs (<span id="fileRefCount">0</span>)
+                            <span class="font-bold">Audio Resources</span>
+                            (<span id="audioResourceCount">0</span>)
                         </summary>
-                        <div class="content">Hidden content here</div>
+                        <div class="content" id="audioResourceInfo"></div>
                     </details>
                 </section>
             </div>

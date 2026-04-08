@@ -1,8 +1,16 @@
-import { readAlsAsXml, getXmlDom, getSessionData } from "./alsParser";
+import {
+  readAlsAsXml,
+  getXmlDom,
+  getSessionData,
+  Track,
+  AudioResource,
+  ValueNodeRef,
+} from "./alsParser";
 import {
   createXmlViewer,
   setXmlViewerContent,
   openXmlViewerSearch,
+  jumpToXmlViewerNode,
 } from "./xmlViewer";
 import { createXmlTreeViewer, renderXmlTree } from "./xmlTreeViewer";
 import { setupSplitDivider } from "./split";
@@ -29,6 +37,10 @@ const treeViewButton = requireElement<HTMLButtonElement>("treeViewButton");
 const sessionNameEl = requireElement<HTMLElement>("sessionName");
 const bpmDisplayEl = requireElement<HTMLElement>("bpmDisplay");
 const lastModifiedEl = requireElement<HTMLElement>("lastModified");
+const trackInfoEl = requireElement<HTMLElement>("trackInfo");
+const trackCountEl = requireElement<HTMLElement>("trackCount");
+const audioResourcesEl = requireElement<HTMLElement>("audioResourceInfo");
+const audioResourcesCountEl = requireElement<HTMLElement>("audioResourceCount");
 
 const codeViewer = createXmlViewer(codeViewEl, "");
 const treeViewer = createXmlTreeViewer(treeViewEl, 2);
@@ -71,6 +83,55 @@ function clearSessionInfo() {
   sessionNameEl.textContent = "_";
   bpmDisplayEl.textContent = "_";
   lastModifiedEl.textContent = "_";
+  trackInfoEl.textContent = "";
+  trackCountEl.textContent = "0";
+  audioResourcesEl.textContent = "";
+  audioResourcesCountEl.textContent = "0";
+}
+
+function renderTrackInfo(tracks: ValueNodeRef<Track>[]) {
+  trackInfoEl.replaceChildren();
+
+  for (const track of tracks) {
+    const row = document.createElement("div");
+    row.className = "cursor-pointer py-1 hover:underline";
+
+    row.innerHTML = `<span class="font-bold">${track.value.type}</span>: ${track.value.name}`;
+
+    row.addEventListener("click", () => {
+      showCodeView();
+      jumpToXmlViewerNode(codeViewer, track.node);
+    });
+
+    trackInfoEl.appendChild(row);
+  }
+}
+
+function renderAudioResources(audioResources: ValueNodeRef<AudioResource>[]) {
+  audioResourcesEl.replaceChildren();
+
+  for (const audioResource of audioResources) {
+    const row = document.createElement("div");
+    row.className = "cursor-pointer py-2 hover:underline";
+
+    row.innerHTML = `<div>
+      <div><span class="font-bold">RelativePath:</span> ${audioResource.value.relativePath}</div>
+      <div><span class="font-bold">AbsolutePath:</span> ${audioResource.value.absolutePath}</div>
+      <div>
+        <span class="font-bold">IsCollected</span> (Inside Project Folder):
+        <span class="font-bold ${audioResource.value.isCollected ? "text-green-600" : "text-red-600"}">
+          ${String(audioResource.value.isCollected).toUpperCase()}
+        </span>
+      </div>
+    </div>`;
+
+    row.addEventListener("click", () => {
+      showCodeView();
+      jumpToXmlViewerNode(codeViewer, audioResource.node);
+    });
+
+    audioResourcesEl.appendChild(row);
+  }
 }
 
 function renderSessionData(file: File, xmlText: string) {
@@ -82,6 +143,10 @@ function renderSessionData(file: File, xmlText: string) {
     ? String(sessionData.bpm.value)
     : "_";
   lastModifiedEl.textContent = formatLastModified(sessionData.lastModified);
+  trackCountEl.textContent = String(sessionData.tracks.length);
+  renderTrackInfo(sessionData.tracks);
+  audioResourcesCountEl.textContent = String(sessionData.audioResources.length);
+  renderAudioResources(sessionData.audioResources);
 
   renderXmlTree(treeViewer, xml);
 }
