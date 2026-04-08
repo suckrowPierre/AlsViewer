@@ -21,5 +21,9 @@
     "split.js": "^1.6.5",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2"
   }
 }

@@ -1,8 +1,8 @@
 export const handleFile = async (
-  file,
-  xmlReader,
-  setAndShowViewerFn,
-  showErrorFn,
+  file: File,
+  xmlReader: (file: File) => Promise<string>,
+  setAndShowViewerFn: (xmlText: string) => void,
+  showErrorFn: (message: string) => void,
 ) => {
   if (!file) return;
   try {

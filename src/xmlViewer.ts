@@ -4,7 +4,7 @@ import { xml } from "@codemirror/lang-xml";
 import { search, searchKeymap, openSearchPanel } from "@codemirror/search";
 import { foldGutter, codeFolding, foldKeymap } from "@codemirror/language";
 
-export const createXmlViewer = (parent, initialDoc = "") => {
+export const createXmlViewer = (parent: HTMLElement, initialDoc = "") => {
   const view = new EditorView({
     state: EditorState.create({
       doc: initialDoc,
@@ -34,7 +34,7 @@ export const createXmlViewer = (parent, initialDoc = "") => {
   return view;
 };
 
-export const setXmlViewerContent = (view, xmlText) => {
+export const setXmlViewerContent = (view: EditorView, xmlText: string) => {
   view.dispatch({
     changes: {
       from: 0,
@@ -44,7 +44,7 @@ export const setXmlViewerContent = (view, xmlText) => {
   });
 };
 
-export const openXmlViewerSearch = (view) => {
+export const openXmlViewerSearch = (view: EditorView) => {
   openSearchPanel(view);
   view.focus();
 };
