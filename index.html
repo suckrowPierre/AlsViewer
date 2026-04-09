@@ -63,25 +63,26 @@
                             <p id="sessionName">_</p>
                             <div class="h-4 flex gap-2">
                                 <button
-                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    class="ml-auto h-4 w-4 cursor-pointer p-0.5 transition-colors group"
                                     id="codeViewButton"
                                     title="Show Code View"
                                 >
                                     <img
                                         src="/code.svg"
                                         alt="Code View"
-                                        class="h-full w-full object-contain"
+                                        class="h-full w-full object-contain pointer-events-none group-[.bg-black]:invert"
                                     />
                                 </button>
+
                                 <button
-                                    class="ml-auto h-4 w-4 cursor-pointer"
+                                    class="ml-auto h-4 w-4 cursor-pointer p-0.5 transition-colors group"
                                     id="treeViewButton"
                                     title="Show Tree View"
                                 >
                                     <img
                                         src="/tree.svg"
                                         alt="Tree View"
-                                        class="h-full w-full object-contain"
+                                        class="h-full w-full object-contain pointer-events-none group-[.bg-black]:invert"
                                     />
                                 </button>
                                 <button
@@ -121,6 +122,18 @@
                         </div>
 
                         <div class="flex-1 min-h-0 relative">
+                            <div
+                                id="loadingOverlay"
+                                class="hidden absolute inset-0 z-10 flex items-center justify-center bg-[#fffff2]/90"
+                            >
+                                <div class="flex flex-col items-center gap-3">
+                                    <div
+                                        class="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"
+                                    ></div>
+                                    <div>Loading session...</div>
+                                </div>
+                            </div>
+
                             <div id="codeView" class="h-full min-h-0"></div>
                             <div
                                 id="treeView"

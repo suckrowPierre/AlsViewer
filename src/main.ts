@@ -33,6 +33,7 @@ const treeViewEl = requireElement<HTMLDivElement>("treeView");
 const searchButton = requireElement<HTMLButtonElement>("searchButton");
 const codeViewButton = requireElement<HTMLButtonElement>("codeViewButton");
 const treeViewButton = requireElement<HTMLButtonElement>("treeViewButton");
+const cancelButton = requireElement<HTMLButtonElement>("cancelButton");
 
 const sessionNameEl = requireElement<HTMLElement>("sessionName");
 const bpmDisplayEl = requireElement<HTMLElement>("bpmDisplay");
@@ -50,16 +51,45 @@ function showViewer() {
   xmlViewerEl.classList.remove("hidden");
 }
 
+function hideViewer() {
+  xmlViewerEl.classList.add("hidden");
+  uploadView.classList.remove("hidden");
+}
+
+function setActiveViewButton(activeButton: HTMLButtonElement) {
+  const inactiveClasses = ["bg-transparent"];
+  const activeClasses = ["bg-black", "rounded-sm"];
+
+  [codeViewButton, treeViewButton].forEach((button) => {
+    button.classList.remove(...activeClasses);
+    button.classList.add(...inactiveClasses);
+  });
+
+  activeButton.classList.remove(...inactiveClasses);
+  activeButton.classList.add(...activeClasses);
+}
+
 function showCodeView() {
   codeViewEl.classList.remove("hidden");
   treeViewEl.classList.add("hidden");
+  setActiveViewButton(codeViewButton);
 }
 
 function showTreeView() {
   treeViewEl.classList.remove("hidden");
   codeViewEl.classList.add("hidden");
+  setActiveViewButton(treeViewButton);
   treeViewer.cy.resize();
   treeViewer.cy.fit(undefined, 24);
+}
+
+function resetViewer() {
+  hideViewer();
+  clearSessionInfo();
+  input.value = "";
+  setXmlViewerContent(codeViewer, "");
+  treeViewer.cy.elements().remove();
+  setActiveViewButton(codeViewButton);
 }
 
 function renderXml(xmlText: string) {
@@ -70,6 +100,7 @@ function renderXml(xmlText: string) {
   searchButton.onclick = () => openXmlViewerSearch(codeViewer);
   codeViewButton.onclick = () => showCodeView();
   treeViewButton.onclick = () => showTreeView();
+  cancelButton.onclick = () => resetViewer();
 }
 
 function formatLastModified(date: Date): string {
