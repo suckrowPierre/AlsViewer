@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://suckrowpierre.github.io/AlsViewer/sitemap.xml

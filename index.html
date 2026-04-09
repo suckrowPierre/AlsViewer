@@ -13,12 +13,38 @@
         />
         <link rel="stylesheet" href="src/main.css" />
         <title>.AlsViewer</title>
+        <meta
+            name="description"
+            content="Open Ableton Live .als files in the browser, inspect session XML, view tracks and audio resources, and download the extracted XML."
+        />
+
+        <link
+            rel="canonical"
+            href="https://suckrowpierre.github.io/AlsViewer/"
+        />
+        <meta name="robots" content="index,follow" />
+
+        <meta property="og:title" content="AlsViewer" />
+        <meta
+            property="og:description"
+            content="Inspect Ableton Live .als files as XML directly in the browser."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:url"
+            content="https://suckrowpierre.github.io/AlsViewer/"
+        />
     </head>
     <body
         class="font-code text-sm w-full h-[100dvh] grid grid-cols-1 grid-rows-[auto_1fr_auto] divide-y divide-black bg-[#fffff2]"
     >
-        <header class="flex flex-row px-4 py-2 col-span-full">
-            .AlsViewer
+        <header class="flex flex-row px-4 col-span-full items-center gap-8">
+            <h1 class="font-bold text-lg">.AlsViewer</h1>
+            <i class="text-xs">
+                Inspect Ableton Live .als session files natively in your
+                browser. Convert sessions to XML, browse tracks and audio
+                resources, and download the extracted XML.
+            </i>
         </header>
         <main class="min-h-0">
             <div id="split" class="flex h-full w-full min-h-0">
