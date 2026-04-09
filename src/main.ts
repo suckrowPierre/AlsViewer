@@ -29,10 +29,12 @@ const dropZone = requireElement<HTMLLabelElement>("drop-zone");
 const xmlViewerEl = requireElement<HTMLDivElement>("xml-viewer");
 const codeViewEl = requireElement<HTMLDivElement>("codeView");
 const treeViewEl = requireElement<HTMLDivElement>("treeView");
+const loadingOverlay = requireElement<HTMLDivElement>("loadingOverlay");
 
 const searchButton = requireElement<HTMLButtonElement>("searchButton");
 const codeViewButton = requireElement<HTMLButtonElement>("codeViewButton");
 const treeViewButton = requireElement<HTMLButtonElement>("treeViewButton");
+const downloadButton = requireElement<HTMLButtonElement>("downloadButton");
 const cancelButton = requireElement<HTMLButtonElement>("cancelButton");
 
 const sessionNameEl = requireElement<HTMLElement>("sessionName");
@@ -46,6 +48,9 @@ const audioResourcesCountEl = requireElement<HTMLElement>("audioResourceCount");
 const codeViewer = createXmlViewer(codeViewEl, "");
 const treeViewer = createXmlTreeViewer(treeViewEl, 2);
 
+let currentXmlText = "";
+let currentFileName = "";
+
 function showViewer() {
   uploadView.classList.add("hidden");
   xmlViewerEl.classList.remove("hidden");
@@ -54,6 +59,15 @@ function showViewer() {
 function hideViewer() {
   xmlViewerEl.classList.add("hidden");
   uploadView.classList.remove("hidden");
+}
+
+function showLoading() {
+  showViewer();
+  loadingOverlay.classList.remove("hidden");
+}
+
+function hideLoading() {
+  loadingOverlay.classList.add("hidden");
 }
 
 function setActiveViewButton(activeButton: HTMLButtonElement) {
@@ -83,16 +97,41 @@ function showTreeView() {
   treeViewer.cy.fit(undefined, 24);
 }
 
+function getDownloadFileName(fileName: string) {
+  return fileName.replace(/\.als$/i, "") + ".xml";
+}
+
+function downloadXml() {
+  if (!currentXmlText) return;
+
+  const blob = new Blob([currentXmlText], { type: "application/xml" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = getDownloadFileName(currentFileName || "session.als");
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
 function resetViewer() {
+  hideLoading();
   hideViewer();
   clearSessionInfo();
   input.value = "";
+  currentXmlText = "";
+  currentFileName = "";
   setXmlViewerContent(codeViewer, "");
   treeViewer.cy.elements().remove();
   setActiveViewButton(codeViewButton);
 }
 
 function renderXml(xmlText: string) {
+  currentXmlText = xmlText;
+
   setXmlViewerContent(codeViewer, xmlText);
   showViewer();
   showCodeView();
@@ -100,6 +139,7 @@ function renderXml(xmlText: string) {
   searchButton.onclick = () => openXmlViewerSearch(codeViewer);
   codeViewButton.onclick = () => showCodeView();
   treeViewButton.onclick = () => showTreeView();
+  downloadButton.onclick = () => downloadXml();
   cancelButton.onclick = () => resetViewer();
 }
 
@@ -188,6 +228,9 @@ function showError(error: string) {
 }
 
 async function processFile(file: File) {
+  currentFileName = file.name;
+  showLoading();
+
   try {
     const xmlText = await readAlsAsXml(file);
     renderXml(xmlText);
@@ -196,6 +239,8 @@ async function processFile(file: File) {
     const message =
       error instanceof Error ? error.message : "Failed to process file";
     showError(message);
+  } finally {
+    hideLoading();
   }
 }
 
