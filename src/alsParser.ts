@@ -222,14 +222,13 @@ const isCollectedAudioResource = (
   relativePath: string,
 ): boolean => {
   return (
-    relativePathType === "3" &&
-    relativePath.startsWith("Samples/Imported/")
+    (relativePathType === "3" || relativePathType === "6") &&
+    (relativePath.startsWith("Samples/Imported/") ||
+      relativePath.startsWith("Samples/Recorded/"))
   );
 };
 
-const getAudioResources = (
-  xml: XmlDocument,
-): ValueNodeRef<AudioResource>[] => {
+const getAudioResources = (xml: XmlDocument): ValueNodeRef<AudioResource>[] => {
   const fileRefNodes = Array.from(
     xml.getElementsByTagName("FileRef"),
   ) as XmlNodeWithPosition[];
@@ -254,10 +253,7 @@ const getAudioResources = (
         value: {
           relativePath,
           absolutePath,
-          isCollected: isCollectedAudioResource(
-            relativePathType,
-            relativePath,
-          ),
+          isCollected: isCollectedAudioResource(relativePathType, relativePath),
         },
         node,
       },
